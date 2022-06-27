@@ -1,5 +1,27 @@
 # Port of R code from Martin AD, Quinn KM, Park JH (2011). “MCMCpack: Markov Chain Monte Carlo in R.” Journal of Statistical Software, 42(9), 22. doi: 10.18637/jss.v042.i09.
 
+import numpy as np
+import math
+
+# The function r defined in Liao and Rosen 2001
+def r_function(n1, n2, m1, psi, i):
+    return (n1-i+1)*(m1-i+1) / (i*(n2-m1+i)) * psi
+
+
+def sample_low_to_high(lower, ran, pi, shift, uu):
+      for i in range(lower, uu + 1):
+        if(ran <= pi[i+shift]):
+            return(i)
+        ran = ran - pi[i+shift]
+
+
+def sample_high_to_low(upper, ran, pi, shift, ll): 
+      for i in range(upper, ll - 1, -1):
+        if(ran <= pi[i+shift]):
+            return(i)
+        ran = ran - pi[i+shift]
+
+        
 class NonCentralHyperGeometric:
     """Allows for sampling from noncentralhypergeometric distribution
     Following the methods of Liao and Rosen, 2001
